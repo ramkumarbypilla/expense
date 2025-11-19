@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+
+    <h1>Welcome to home page</h1>
+    <form method="POST">
+        {% csrf_token %}
+    <label for="ride_from">From</label>
+    <input type="text" name="ride_from" id="">
+    <br><br>
+     <label for="ride_to">To</label>
+    <input type="text" name="ride_to" id="">
+    <br><br>
+
+    
+        <label>Payment Type</label>
+        
+        <br>
+
+        <input type="radio" name="payment_type" id="cash" value="cash">
+        <label for="cash">Cash</label>
+
+        <input type="radio" name="payment_type" id="card" value="card">
+        <label for="card">Card</label>
+
+        <input type="radio" name="payment_type" id="company" value="company">
+        <label for="company">Company</label>
+
+        <br>
+    
+    <br>
+     <label for="amount">Amount</label>
+    <input type="text" name="amount" id="">
+    <br><br>
+     <label for="tips">Tips</label>
+    <input type="text" name="tips" id="">
+        <button>Save</button>
+
+</form>
+
+{% if saved %}
+    <p style="color: green;">
+        Ride saved successfully!<br>
+        From: {{ ride.ride_from }}<br>
+        To: {{ ride.ride_to }}<br>
+        Payment: {{ ride.payment_type }}<br>
+        Amount: {{ ride.amount }}<br>
+        Tips: {{ ride.tips }}
+    </p>
+{% endif %}
+
+
+</body>
+</html>
