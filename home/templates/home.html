@@ -8,6 +8,13 @@
 <body>
 
     <h1>Welcome to home page</h1>
+
+    <br><br>
+    <a href="/rides/">
+    <button type="button">View All Rides</button>
+</a>
+
+<br><br>
     <form method="POST">
         {% csrf_token %}
     <label for="ride_from">From</label>
@@ -52,6 +59,8 @@
         <button>Save</button>
 
 </form>
+
+
 
 {% if saved %}
     <p style="color: green;">

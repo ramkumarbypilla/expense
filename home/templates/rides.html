@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rides List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">All Rides</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Payment</th>
+        <th>Ride Type</th>
+        <th>Amount</th>
+        <th>Tips</th>
+        <th>Date</th>
+    </tr>
+
+    {% for ride in rides %}
+    <tr>
+        <td>{{ ride.id }}</td>
+        <td>{{ ride.ride_from }}</td>
+        <td>{{ ride.ride_to }}</td>
+        <td>{{ ride.payment_type }}</td>
+        <td>{{ ride.ride_type }}</td>
+        <td>{{ ride.amount }}</td>
+        <td>{{ ride.tips }}</td>
+        <td>{{ ride.created_at }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="8" style="text-align:center;">No rides found</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

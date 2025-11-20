@@ -42,3 +42,8 @@ def home(request):
 
     # If GET request (first time page load)
     return render(request, 'home.html')
+
+
+def view_rides(request):
+    rides = Ride.objects.all().order_by('-created_at')  # Fetch all rides, latest first
+    return render(request, 'view_rides.html', {'rides': rides})
