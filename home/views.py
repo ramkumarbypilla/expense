@@ -7,6 +7,7 @@ def home(request):
         ride_from = request.POST.get('ride_from')
         ride_to = request.POST.get('ride_to')
         payment_type = request.POST.get('payment_type')
+        ride_type = request.POST.get('ride_type')
         amount = request.POST.get('amount')
         tips = request.POST.get('tips')
 
@@ -19,6 +20,7 @@ def home(request):
             ride_from=ride_from,
             ride_to=ride_to,
             payment_type=payment_type,
+            ride_type=ride_type,
             amount=amount,
             tips=tips,
         )
@@ -28,6 +30,7 @@ def home(request):
             'ride_from': ride_from,
             'ride_to': ride_to,
             'payment_type': payment_type,
+            'ride_type': ride_type,
             'amount': amount,
             'tips': tips,
             'saved': True,
