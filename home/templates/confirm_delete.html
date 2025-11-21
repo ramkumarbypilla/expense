@@ -2,21 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delete Ride</title>
+    <title>Delete Ride #{{ ride.id }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 40%, #000 100%);
+            color: #e5e7eb;
+        }
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+        .card {
+            width: 100%;
+            max-width: 540px;
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 16px;
+            border: 1px solid rgba(248, 113, 113, 0.6);
+            box-shadow: 0 20px 40px rgba(127, 29, 29, 0.8);
+            padding: 24px 24px 26px;
+        }
+        .title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #fecaca;
+        }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #fecaca;
+            margin-bottom: 14px;
+        }
+        .details {
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            background: rgba(30, 64, 175, 0.2);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        .details span.label {
+            color: #9ca3af;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .details p {
+            margin: 4px 0 8px;
+        }
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-danger {
+            background: rgba(248, 113, 113, 0.2);
+            color: #fecaca;
+            border: 1px solid rgba(248, 113, 113, 0.8);
+        }
+        .btn-secondary {
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
 <body>
-    <h1>Delete Ride #{{ ride.id }}?</h1>
+<div class="page">
+    <div class="card">
+        <div class="title">Delete Ride #{{ ride.id }}?</div>
+        <div class="subtitle">
+            This action cannot be undone. Are you sure you want to remove this ride from your records?
+        </div>
 
-    <p>
-        From: {{ ride.ride_from }}<br>
-        To: {{ ride.ride_to }}<br>
-        Amount: {{ ride.amount }}
-    </p>
+        <div class="details">
+            <p><span class="label">From</span><br>{{ ride.ride_from }}</p>
+            <p><span class="label">To</span><br>{{ ride.ride_to }}</p>
+            <p><span class="label">Amount</span><br>{{ ride.amount }}</p>
+            <p><span class="label">Date</span><br>{{ ride.created_at|date:"Y-m-d H:i" }}</p>
+        </div>
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-        <a href="{% url 'rides_list' %}">Cancel</a>
-    </form>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="actions">
+                <a href="{% url 'rides_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Yes, delete</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

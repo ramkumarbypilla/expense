@@ -144,3 +144,4 @@ def summary(request):
     }
 
     return render(request, 'summary.html', context)
+

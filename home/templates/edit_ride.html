@@ -2,59 +2,230 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Ride</title>
+    <title>Edit Ride #{{ ride.id }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 40%, #000 100%);
+            color: #e5e7eb;
+        }
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+        .card {
+            width: 100%;
+            max-width: 720px;
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.85);
+            padding: 24px 24px 28px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #6366f1, #ec4899);
+            color: #f9fafb;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+        }
+        .btn-secondary {
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 16px;
+            margin-top: 8px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #9ca3af;
+        }
+        input[type="text"] {
+            padding: 7px 9px;
+            border-radius: 10px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.85);
+            color: #e5e7eb;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.6);
+        }
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .radio-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(75, 85, 99, 0.9);
+            background: rgba(15, 23, 42, 0.85);
+            font-size: 0.8rem;
+        }
+        .radio-pill input {
+            margin: 0;
+        }
+        .form-footer {
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 640px) {
+            .card {
+                padding: 18px 14px 22px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Edit Ride #{{ ride.id }}</h1>
+<div class="page">
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <div class="title">Edit Ride #{{ ride.id }}</div>
+                <div class="subtitle">
+                    Adjust details if something was entered incorrectly.
+                </div>
+            </div>
+            <div>
+                <a href="{% url 'rides_list' %}" class="btn btn-secondary">Back to Rides</a>
+            </div>
+        </div>
 
-    <form method="POST">
-        {% csrf_token %}
+        <form method="POST">
+            {% csrf_token %}
 
-        <label for="ride_from">From</label>
-        <input type="text" name="ride_from" id="ride_from" value="{{ ride.ride_from }}">
-        <br><br>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="ride_from">From</label>
+                    <input type="text" name="ride_from" id="ride_from" value="{{ ride.ride_from }}">
+                </div>
 
-        <label for="ride_to">To</label>
-        <input type="text" name="ride_to" id="ride_to" value="{{ ride.ride_to }}">
-        <br><br>
+                <div class="form-group">
+                    <label for="ride_to">To</label>
+                    <input type="text" name="ride_to" id="ride_to" value="{{ ride.ride_to }}">
+                </div>
 
-        <label>Payment Type</label><br>
-        <input type="radio" name="payment_type" id="cash" value="cash"
-               {% if ride.payment_type == 'cash' %}checked{% endif %}>
-        <label for="cash">Cash</label>
+                <div class="form-group">
+                    <label>Payment Type</label>
+                    <div class="radio-group">
+                        <label class="radio-pill">
+                            <input type="radio" name="payment_type" value="cash"
+                                   {% if ride.payment_type == 'cash' %}checked{% endif %}>
+                            Cash
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="payment_type" value="card"
+                                   {% if ride.payment_type == 'card' %}checked{% endif %}>
+                            Card
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="payment_type" value="company"
+                                   {% if ride.payment_type == 'company' %}checked{% endif %}>
+                            Company
+                        </label>
+                    </div>
+                </div>
 
-        <input type="radio" name="payment_type" id="card" value="card"
-               {% if ride.payment_type == 'card' %}checked{% endif %}>
-        <label for="card">Card</label>
+                <div class="form-group">
+                    <label>Ride Type</label>
+                    <div class="radio-group">
+                        <label class="radio-pill">
+                            <input type="radio" name="ride_type" value="app"
+                                   {% if ride.ride_type == 'app' %}checked{% endif %}>
+                            App
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="ride_type" value="rank"
+                                   {% if ride.ride_type == 'rank' %}checked{% endif %}>
+                            Rank
+                        </label>
+                    </div>
+                </div>
 
-        <input type="radio" name="payment_type" id="company" value="company"
-               {% if ride.payment_type == 'company' %}checked{% endif %}>
-        <label for="company">Company</label>
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="text" name="amount" id="amount" value="{{ ride.amount }}">
+                </div>
 
-        <br><br>
+                <div class="form-group">
+                    <label for="tips">Tips</label>
+                    <input type="text" name="tips" id="tips" value="{{ ride.tips }}">
+                </div>
+            </div>
 
-        <label>Ride Type</label><br>
-        <input type="radio" name="ride_type" id="app" value="app"
-               {% if ride.ride_type == 'app' %}checked{% endif %}>
-        <label for="app">App</label>
+            <div class="form-footer">
+                <a href="{% url 'rides_list' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
 
-        <input type="radio" name="ride_type" id="rank" value="rank"
-               {% if ride.ride_type == 'rank' %}checked{% endif %}>
-        <label for="rank">Rank</label>
-
-        <br><br>
-
-        <label for="amount">Amount</label>
-        <input type="text" name="amount" id="amount" value="{{ ride.amount }}">
-        <br><br>
-
-        <label for="tips">Tips</label>
-        <input type="text" name="tips" id="tips" value="{{ ride.tips }}">
-        <br><br>
-
-        <button type="submit">Save Changes</button>
-    </form>
-
-    <p><a href="{% url 'rides_list' %}">Back to Rides</a></p>
+    </div>
+</div>
 </body>
 </html>

@@ -3,81 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Taxi Expense - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 40%, #000 100%);
+            color: #e5e7eb;
+        }
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+        .card {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.8);
+            padding: 24px 24px 28px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #6366f1, #ec4899);
+            color: #f9fafb;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+        }
+        .btn-secondary {
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 16px;
+            margin-top: 12px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #9ca3af;
+        }
+        input[type="text"] {
+            padding: 7px 9px;
+            border-radius: 10px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            background: rgba(15, 23, 42, 0.85);
+            color: #e5e7eb;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        input[type="text"]:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.6);
+        }
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .radio-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(75, 85, 99, 0.9);
+            background: rgba(15, 23, 42, 0.85);
+            font-size: 0.8rem;
+        }
+        .radio-pill input {
+            margin: 0;
+        }
+        .form-footer {
+            margin-top: 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn-submit {
+            padding-inline: 18px;
+        }
+        .success-box {
+            margin-top: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(22, 163, 74, 0.6);
+            background: rgba(22, 163, 74, 0.08);
+            padding: 10px 12px;
+            font-size: 0.85rem;
+        }
+        .success-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #bbf7d0;
+        }
+        .success-text {
+            color: #d1fae5;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 18px 16px 22px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
+<div class="page">
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <div class="title">Taxi Expense Tracker</div>
+                <div class="subtitle">Log each ride and see your daily, weekly, monthly and yearly totals.</div>
+            </div>
+            <div class="nav-buttons">
+                <a href="/rides/" class="btn btn-secondary">View Rides</a>
+                <a href="/summary/" class="btn btn-primary">Summary</a>
+            </div>
+        </div>
 
-    <h1>Welcome to home page</h1>
+        <form method="POST">
+            {% csrf_token %}
 
-    <br><br>
-    <a href="/rides/">
-    <button type="button">View All Rides</button>
-    </a>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="ride_from">From</label>
+                    <input type="text" name="ride_from" id="ride_from" placeholder="Pickup location">
+                </div>
 
-    <a href="/summary/">
-    <button type="button">Summary</button>
-    </a>
+                <div class="form-group">
+                    <label for="ride_to">To</label>
+                    <input type="text" name="ride_to" id="ride_to" placeholder="Drop location">
+                </div>
 
+                <div class="form-group">
+                    <label>Payment Type</label>
+                    <div class="radio-group">
+                        <label class="radio-pill">
+                            <input type="radio" name="payment_type" value="cash"> Cash
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="payment_type" value="card"> Card
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="payment_type" value="company"> Company
+                        </label>
+                    </div>
+                </div>
 
-<br><br>
-    <form method="POST">
-        {% csrf_token %}
-    <label for="ride_from">From</label>
-    <input type="text" name="ride_from" id="">
-    <br><br>
-     <label for="ride_to">To</label>
-    <input type="text" name="ride_to" id="">
-    <br><br>
+                <div class="form-group">
+                    <label>Ride Type</label>
+                    <div class="radio-group">
+                        <label class="radio-pill">
+                            <input type="radio" name="ride_type" value="app"> App
+                        </label>
+                        <label class="radio-pill">
+                            <input type="radio" name="ride_type" value="rank"> Rank
+                        </label>
+                    </div>
+                </div>
 
-    
-        <label>Payment Type</label>
-        
-        <br>
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="text" name="amount" id="amount" placeholder="e.g. 15.60">
+                </div>
 
-        <input type="radio" name="payment_type" id="cash" value="cash">
-        <label for="cash">Cash</label>
+                <div class="form-group">
+                    <label for="tips">Tips</label>
+                    <input type="text" name="tips" id="tips" placeholder="Optional">
+                </div>
+            </div>
 
-        <input type="radio" name="payment_type" id="card" value="card">
-        <label for="card">Card</label>
+            <div class="form-footer">
+                <button type="submit" class="btn btn-primary btn-submit">Save Ride</button>
+            </div>
+        </form>
 
-        <input type="radio" name="payment_type" id="company" value="company">
-        <label for="company">Company</label>
-
-    <br><br>
-
-    <label>Ride Type</label>
-        
-        <br>
-
-        <input type="radio" name="ride_type" id="app" value="app">
-        <label for="app">App</label>
-
-        <input type="radio" name="ride_type" id="rank" value="rank">
-        <label for="rank">Rank</label>
-
-    <br><br>
-     <label for="amount">Amount</label>
-    <input type="text" name="amount" id="">
-    <br><br>
-     <label for="tips">Tips</label>
-    <input type="text" name="tips" id="">
-        <button>Save</button>
-
-</form>
-
-
-
-{% if saved %}
-    <p style="color: green;">
-        Ride saved successfully!<br>
-        From: {{ ride.ride_from }}<br>
-        To: {{ ride.ride_to }}<br>
-        Payment: {{ ride.payment_type }}<br>
-        Amount: {{ ride.amount }}<br>
-        Tips: {{ ride.tips }}
-    </p>
-{% endif %}
-
-
+        {% if saved %}
+        <div class="success-box">
+            <div class="success-title">Ride saved successfully</div>
+            <div class="success-text">
+                From: {{ ride.ride_from }} &middot;
+                To: {{ ride.ride_to }} &middot;
+                Payment: {{ ride.payment_type }} &middot;
+                Amount: {{ ride.amount }} &middot;
+                Tips: {{ ride.tips }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
 </body>
 </html>

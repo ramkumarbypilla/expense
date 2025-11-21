@@ -2,48 +2,232 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rides</title>
+    <title>All Rides</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 40%, #000 100%);
+            color: #e5e7eb;
+        }
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+        .card {
+            width: 100%;
+            max-width: 960px;
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.85);
+            padding: 24px 24px 28px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #6366f1, #ec4899);
+            color: #f9fafb;
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+        }
+        .btn-secondary {
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+        }
+        .btn-danger {
+            background: rgba(248, 113, 113, 0.12);
+            color: #fecaca;
+            border: 1px solid rgba(248, 113, 113, 0.6);
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+        }
+        .table-wrapper {
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th, td {
+            padding: 6px 10px;
+            text-align: left;
+        }
+        th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(30, 64, 175, 0.4);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.5);
+            color: #e5e7eb;
+            white-space: nowrap;
+        }
+        tbody tr:nth-child(odd) {
+            background: rgba(15, 23, 42, 0.96);
+        }
+        tbody tr:nth-child(even) {
+            background: rgba(15, 23, 42, 0.85);
+        }
+        td {
+            border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+            vertical-align: middle;
+        }
+        .amount-cell {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        .date-cell {
+            font-variant-numeric: tabular-nums;
+            color: #a5b4fc; /* light indigo for better visibility */
+            white-space: nowrap;
+        }
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: capitalize;
+        }
+        .tag-payment {
+            background: rgba(56, 189, 248, 0.15);
+            color: #7dd3fc;
+            border: 1px solid rgba(56, 189, 248, 0.6);
+        }
+        .tag-ride {
+            background: rgba(129, 140, 248, 0.18);
+            color: #c7d2fe;
+            border: 1px solid rgba(129, 140, 248, 0.7);
+        }
+        .actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .empty-row td {
+            text-align: center;
+            padding: 18px 0;
+            color: #9ca3af;
+        }
+        @media (max-width: 640px) {
+            .card {
+                padding: 18px 14px 22px;
+            }
+            th:nth-child(1),
+            td:nth-child(1) {
+                display: none; /* hide ID on small screens */
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>All Rides</h1>
+<div class="page">
+    <div class="card">
+        <div class="card-header">
+            <div>
+                <div class="title">All Rides</div>
+                <div class="subtitle">Review, edit, or delete your logged rides.</div>
+            </div>
+            <div>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </div>
 
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>ID</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Payment</th>
-            <th>Ride Type</th>
-            <th>Amount</th>
-            <th>Tips</th>
-            <th>Date</th>
-            <th>Actions</th>
-        </tr>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Payment</th>
+                        <th>Ride Type</th>
+                        <th>Amount</th>
+                        <th>Tips</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ride in rides %}
+                    <tr>
+                        <td>{{ ride.id }}</td>
+                        <td>{{ ride.ride_from }}</td>
+                        <td>{{ ride.ride_to }}</td>
+                        <td>
+                            <span class="tag tag-payment">{{ ride.payment_type }}</span>
+                        </td>
+                        <td>
+                            <span class="tag tag-ride">{{ ride.ride_type }}</span>
+                        </td>
+                        <td class="amount-cell">{{ ride.amount }}</td>
+                        <td class="amount-cell">{{ ride.tips }}</td>
+                        <td class="date-cell">
+                            {{ ride.created_at|date:"Y-m-d H:i" }}
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="{% url 'edit_ride' ride.id %}" class="btn btn-secondary" style="padding:4px 10px;font-size:0.78rem;">
+                                    Edit
+                                </a>
+                                <form action="{% url 'delete_ride' ride.id %}" method="POST" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit"
+                                            class="btn btn-danger"
+                                            style="padding:4px 10px;font-size:0.78rem;"
+                                            onclick="return confirm('Delete this ride?');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr class="empty-row">
+                        <td colspan="9">No rides recorded yet.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        {% for ride in rides %}
-        <tr>
-            <td>{{ ride.id }}</td>
-            <td>{{ ride.ride_from }}</td>
-            <td>{{ ride.ride_to }}</td>
-            <td>{{ ride.payment_type }}</td>
-            <td>{{ ride.ride_type }}</td>
-            <td>{{ ride.amount }}</td>
-            <td>{{ ride.tips }}</td>
-            <td>{{ ride.created_at }}</td>
-            <td>
-                <a href="{% url 'edit_ride' ride.id %}">Edit</a>
-
-                <form action="{% url 'delete_ride' ride.id %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Delete this ride?');">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <p><a href="{% url 'home' %}">Back to Home</a></p>
+    </div>
+</div>
 </body>
 </html>
