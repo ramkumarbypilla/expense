@@ -86,7 +86,11 @@ def delete_ride(request, ride_id):
 
 
 def summary(request):
-    # ---------- DAILY TOTAL + RUNNING TOTAL + SHARES ----------
+    # Percentages
+    COMPANY_PERCENT = Decimal('0.40')
+    DRIVER_PERCENT = Decimal('0.60')
+
+    # ---------- DAILY TOTAL + RUNNING TOTAL ----------
     daily_qs = (
         Ride.objects
         .annotate(day=TruncDate('created_at'))
@@ -100,28 +104,27 @@ def summary(request):
 
     daily_data = []
     running_total = Decimal('0')
-
     for row in daily_qs:
-        amount = row['total_amount'] or Decimal('0')
+        amt = row['total_amount'] or Decimal('0')
         tips = row['total_tips'] or Decimal('0')
 
-        running_total += amount
+        company_share = (amt * COMPANY_PERCENT)
+        driver_share = (amt * DRIVER_PERCENT)
+        take_home = driver_share + tips
 
-        company_share = amount * Decimal('0.40')
-        my_share = amount * Decimal('0.60')
-        take_home = my_share + tips
+        running_total += amt
 
         daily_data.append({
             'day': row['day'],
-            'total_amount': amount,
+            'total_amount': amt,
             'running_total': running_total,
-            'total_tips': tips,
             'company_share': company_share,
-            'my_share': my_share,
+            'driver_share': driver_share,
+            'total_tips': tips,
             'take_home': take_home,
         })
 
-    # ---------- WEEKLY TOTAL + SHARES ----------
+    # ---------- WEEKLY TOTAL ----------
     weekly_qs = (
         Ride.objects
         .annotate(
@@ -138,24 +141,24 @@ def summary(request):
 
     weekly_data = []
     for row in weekly_qs:
-        amount = row['total_amount'] or Decimal('0')
+        amt = row['total_amount'] or Decimal('0')
         tips = row['total_tips'] or Decimal('0')
 
-        company_share = amount * Decimal('0.40')
-        my_share = amount * Decimal('0.60')
-        take_home = my_share + tips
+        company_share = (amt * COMPANY_PERCENT)
+        driver_share = (amt * DRIVER_PERCENT)
+        take_home = driver_share + tips
 
         weekly_data.append({
             'year': row['year'],
             'week': row['week'],
-            'total_amount': amount,
-            'total_tips': tips,
+            'total_amount': amt,
             'company_share': company_share,
-            'my_share': my_share,
+            'driver_share': driver_share,
+            'total_tips': tips,
             'take_home': take_home,
         })
 
-    # ---------- MONTHLY TOTAL + SHARES ----------
+    # ---------- MONTHLY TOTAL ----------
     monthly_qs = (
         Ride.objects
         .annotate(month=TruncMonth('created_at'))
@@ -169,23 +172,23 @@ def summary(request):
 
     monthly_data = []
     for row in monthly_qs:
-        amount = row['total_amount'] or Decimal('0')
+        amt = row['total_amount'] or Decimal('0')
         tips = row['total_tips'] or Decimal('0')
 
-        company_share = amount * Decimal('0.40')
-        my_share = amount * Decimal('0.60')
-        take_home = my_share + tips
+        company_share = (amt * COMPANY_PERCENT)
+        driver_share = (amt * DRIVER_PERCENT)
+        take_home = driver_share + tips
 
         monthly_data.append({
             'month': row['month'],
-            'total_amount': amount,
-            'total_tips': tips,
+            'total_amount': amt,
             'company_share': company_share,
-            'my_share': my_share,
+            'driver_share': driver_share,
+            'total_tips': tips,
             'take_home': take_home,
         })
 
-    # ---------- YEARLY TOTAL + SHARES ----------
+    # ---------- YEARLY TOTAL ----------
     yearly_qs = (
         Ride.objects
         .annotate(year=ExtractYear('created_at'))
@@ -199,19 +202,19 @@ def summary(request):
 
     yearly_data = []
     for row in yearly_qs:
-        amount = row['total_amount'] or Decimal('0')
+        amt = row['total_amount'] or Decimal('0')
         tips = row['total_tips'] or Decimal('0')
 
-        company_share = amount * Decimal('0.40')
-        my_share = amount * Decimal('0.60')
-        take_home = my_share + tips
+        company_share = (amt * COMPANY_PERCENT)
+        driver_share = (amt * DRIVER_PERCENT)
+        take_home = driver_share + tips
 
         yearly_data.append({
             'year': row['year'],
-            'total_amount': amount,
-            'total_tips': tips,
+            'total_amount': amt,
             'company_share': company_share,
-            'my_share': my_share,
+            'driver_share': driver_share,
+            'total_tips': tips,
             'take_home': take_home,
         })
 
