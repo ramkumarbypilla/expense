@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Summary</title>
+    <style>
+        .tabs button {
+            padding: 8px 16px;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        .tab-content {
+            display: none;
+            margin-top: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            padding: 6px 10px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="/">Back</a>
+
+<h1>Ride Summary</h1>
+
+<div class="tabs">
+    <button onclick="openTab('daily')">Daily</button>
+    <button onclick="openTab('weekly')">Weekly</button>
+    <button onclick="openTab('monthly')">Monthly</button>
+    <button onclick="openTab('yearly')">Yearly</button>
+</div>
+
+<!-- DAILY TAB -->
+<div id="daily" class="tab-content active">
+    <h2>Daily Total & Running Total</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Daily Total</th>
+                <th>Running Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in daily_data %}
+            <tr>
+                <td>{{ row.day|date:"Y-m-d" }}</td>
+                <td>{{ row.total_amount }}</td>
+                <td>{{ row.running_total }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">No rides yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- WEEKLY TAB -->
+<div id="weekly" class="tab-content">
+    <h2>Weekly Totals</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Week Number</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in weekly_data %}
+            <tr>
+                <td>{{ row.year }}</td>
+                <td>{{ row.week }}</td>
+                <td>{{ row.total_amount }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">No rides yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- MONTHLY TAB -->
+<div id="monthly" class="tab-content">
+    <h2>Monthly Totals</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in monthly_data %}
+            <tr>
+                <!-- month is a date like 2025-11-01, we show "November 2025" -->
+                <td>{{ row.month|date:"F Y" }}</td>
+                <td>{{ row.total_amount }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="2">No rides yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- YEARLY TAB -->
+<div id="yearly" class="tab-content">
+    <h2>Yearly Totals</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in yearly_data %}
+            <tr>
+                <td>{{ row.year }}</td>
+                <td>{{ row.total_amount }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="2">No rides yet.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function openTab(id) {
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+</script>
+
+</body>
+</html>

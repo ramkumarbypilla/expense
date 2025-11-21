@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Ride</title>
+</head>
+<body>
+    <h1>Delete Ride #{{ ride.id }}?</h1>
+
+    <p>
+        From: {{ ride.ride_from }}<br>
+        To: {{ ride.ride_to }}<br>
+        Amount: {{ ride.amount }}
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'rides_list' %}">Cancel</a>
+    </form>
+</body>
+</html>

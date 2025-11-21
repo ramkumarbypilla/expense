@@ -2,59 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rides List</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background: #ddd;
-        }
-    </style>
+    <title>Rides</title>
 </head>
 <body>
+    <h1>All Rides</h1>
 
-<h2 style="text-align:center;">All Rides</h2>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Payment</th>
+            <th>Ride Type</th>
+            <th>Amount</th>
+            <th>Tips</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>From</th>
-        <th>To</th>
-        <th>Payment</th>
-        <th>Ride Type</th>
-        <th>Amount</th>
-        <th>Tips</th>
-        <th>Date</th>
-    </tr>
+        {% for ride in rides %}
+        <tr>
+            <td>{{ ride.id }}</td>
+            <td>{{ ride.ride_from }}</td>
+            <td>{{ ride.ride_to }}</td>
+            <td>{{ ride.payment_type }}</td>
+            <td>{{ ride.ride_type }}</td>
+            <td>{{ ride.amount }}</td>
+            <td>{{ ride.tips }}</td>
+            <td>{{ ride.created_at }}</td>
+            <td>
+                <a href="{% url 'edit_ride' ride.id %}">Edit</a>
 
-    {% for ride in rides %}
-    <tr>
-        <td>{{ ride.id }}</td>
-        <td>{{ ride.ride_from }}</td>
-        <td>{{ ride.ride_to }}</td>
-        <td>{{ ride.payment_type }}</td>
-        <td>{{ ride.ride_type }}</td>
-        <td>{{ ride.amount }}</td>
-        <td>{{ ride.tips }}</td>
-        <td>{{ ride.created_at }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="8" style="text-align:center;">No rides found</td>
-    </tr>
-    {% endfor %}
-</table>
+                <form action="{% url 'delete_ride' ride.id %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Delete this ride?');">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
+    <p><a href="{% url 'home' %}">Back to Home</a></p>
 </body>
 </html>

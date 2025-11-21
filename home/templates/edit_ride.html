@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Ride</title>
+</head>
+<body>
+    <h1>Edit Ride #{{ ride.id }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="ride_from">From</label>
+        <input type="text" name="ride_from" id="ride_from" value="{{ ride.ride_from }}">
+        <br><br>
+
+        <label for="ride_to">To</label>
+        <input type="text" name="ride_to" id="ride_to" value="{{ ride.ride_to }}">
+        <br><br>
+
+        <label>Payment Type</label><br>
+        <input type="radio" name="payment_type" id="cash" value="cash"
+               {% if ride.payment_type == 'cash' %}checked{% endif %}>
+        <label for="cash">Cash</label>
+
+        <input type="radio" name="payment_type" id="card" value="card"
+               {% if ride.payment_type == 'card' %}checked{% endif %}>
+        <label for="card">Card</label>
+
+        <input type="radio" name="payment_type" id="company" value="company"
+               {% if ride.payment_type == 'company' %}checked{% endif %}>
+        <label for="company">Company</label>
+
+        <br><br>
+
+        <label>Ride Type</label><br>
+        <input type="radio" name="ride_type" id="app" value="app"
+               {% if ride.ride_type == 'app' %}checked{% endif %}>
+        <label for="app">App</label>
+
+        <input type="radio" name="ride_type" id="rank" value="rank"
+               {% if ride.ride_type == 'rank' %}checked{% endif %}>
+        <label for="rank">Rank</label>
+
+        <br><br>
+
+        <label for="amount">Amount</label>
+        <input type="text" name="amount" id="amount" value="{{ ride.amount }}">
+        <br><br>
+
+        <label for="tips">Tips</label>
+        <input type="text" name="tips" id="tips" value="{{ ride.tips }}">
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <p><a href="{% url 'rides_list' %}">Back to Rides</a></p>
+</body>
+</html>
