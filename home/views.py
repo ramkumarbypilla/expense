@@ -86,55 +86,134 @@ def delete_ride(request, ride_id):
 
 
 def summary(request):
-    # ---------- DAILY TOTAL + RUNNING TOTAL ----------
+    # ---------- DAILY TOTAL + RUNNING TOTAL + SHARES ----------
     daily_qs = (
         Ride.objects
         .annotate(day=TruncDate('created_at'))
         .values('day')
-        .annotate(total_amount=Sum('amount'))
+        .annotate(
+            total_amount=Sum('amount'),
+            total_tips=Sum('tips'),
+        )
         .order_by('day')
     )
 
     daily_data = []
     running_total = Decimal('0')
+
     for row in daily_qs:
-        total = row['total_amount'] or Decimal('0')
-        running_total += total
+        amount = row['total_amount'] or Decimal('0')
+        tips = row['total_tips'] or Decimal('0')
+
+        running_total += amount
+
+        company_share = amount * Decimal('0.40')
+        my_share = amount * Decimal('0.60')
+        take_home = my_share + tips
+
         daily_data.append({
             'day': row['day'],
-            'total_amount': total,
+            'total_amount': amount,
             'running_total': running_total,
+            'total_tips': tips,
+            'company_share': company_share,
+            'my_share': my_share,
+            'take_home': take_home,
         })
 
-    # ---------- WEEKLY TOTAL ----------
-    weekly_data = (
+    # ---------- WEEKLY TOTAL + SHARES ----------
+    weekly_qs = (
         Ride.objects
         .annotate(
             year=ExtractYear('created_at'),
             week=ExtractWeek('created_at'),
         )
         .values('year', 'week')
-        .annotate(total_amount=Sum('amount'))
+        .annotate(
+            total_amount=Sum('amount'),
+            total_tips=Sum('tips'),
+        )
         .order_by('year', 'week')
     )
 
-    # ---------- MONTHLY TOTAL ----------
-    monthly_data = (
+    weekly_data = []
+    for row in weekly_qs:
+        amount = row['total_amount'] or Decimal('0')
+        tips = row['total_tips'] or Decimal('0')
+
+        company_share = amount * Decimal('0.40')
+        my_share = amount * Decimal('0.60')
+        take_home = my_share + tips
+
+        weekly_data.append({
+            'year': row['year'],
+            'week': row['week'],
+            'total_amount': amount,
+            'total_tips': tips,
+            'company_share': company_share,
+            'my_share': my_share,
+            'take_home': take_home,
+        })
+
+    # ---------- MONTHLY TOTAL + SHARES ----------
+    monthly_qs = (
         Ride.objects
         .annotate(month=TruncMonth('created_at'))
         .values('month')
-        .annotate(total_amount=Sum('amount'))
+        .annotate(
+            total_amount=Sum('amount'),
+            total_tips=Sum('tips'),
+        )
         .order_by('month')
     )
 
-    # ---------- YEARLY TOTAL ----------
-    yearly_data = (
+    monthly_data = []
+    for row in monthly_qs:
+        amount = row['total_amount'] or Decimal('0')
+        tips = row['total_tips'] or Decimal('0')
+
+        company_share = amount * Decimal('0.40')
+        my_share = amount * Decimal('0.60')
+        take_home = my_share + tips
+
+        monthly_data.append({
+            'month': row['month'],
+            'total_amount': amount,
+            'total_tips': tips,
+            'company_share': company_share,
+            'my_share': my_share,
+            'take_home': take_home,
+        })
+
+    # ---------- YEARLY TOTAL + SHARES ----------
+    yearly_qs = (
         Ride.objects
         .annotate(year=ExtractYear('created_at'))
         .values('year')
-        .annotate(total_amount=Sum('amount'))
+        .annotate(
+            total_amount=Sum('amount'),
+            total_tips=Sum('tips'),
+        )
         .order_by('year')
     )
+
+    yearly_data = []
+    for row in yearly_qs:
+        amount = row['total_amount'] or Decimal('0')
+        tips = row['total_tips'] or Decimal('0')
+
+        company_share = amount * Decimal('0.40')
+        my_share = amount * Decimal('0.60')
+        take_home = my_share + tips
+
+        yearly_data.append({
+            'year': row['year'],
+            'total_amount': amount,
+            'total_tips': tips,
+            'company_share': company_share,
+            'my_share': my_share,
+            'take_home': take_home,
+        })
 
     context = {
         'daily_data': daily_data,

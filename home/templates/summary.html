@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta width="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- IMPORTANT FOR MOBILE -->
     <title>Summary</title>
 
     <style>
@@ -19,30 +19,33 @@
             text-align: center;
             color: #9bbcff;
             text-shadow: 0 0 6px #1e90ff;
+            margin-bottom: 15px;
         }
 
         a {
             color: #9bbcff;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 16px;
+            margin-left: 10px;
         }
 
-        /* Tab Buttons */
+        /* Tabs */
         .tabs {
             text-align: center;
             margin-bottom: 20px;
         }
 
         .tabs button {
-            padding: 8px 18px;
+            padding: 10px 20px;
             margin: 5px;
             background: #0f3460;
             color: #d7e3fc;
             border: 1px solid #1e90ff;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
             text-shadow: 0 0 4px #1e90ff;
+            transition: 0.3s;
+            font-size: 15px;
         }
 
         .tabs button:hover {
@@ -50,11 +53,6 @@
             box-shadow: 0 0 8px #1e90ff;
         }
 
-        .tabs button:active {
-            transform: scale(0.96);
-        }
-
-        /* Tab Content */
         .tab-content {
             display: none;
             animation: fadeIn 0.4s ease-in-out;
@@ -69,9 +67,16 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Tables */
-        table {
+        /* RESPONSIVE TABLE WRAPPER */
+        .table-container {
             width: 100%;
+            overflow-x: auto;
+            margin: auto;
+        }
+
+        table {
+            width: 800px;       /* Desktop width */
+            max-width: 100%;    /* Prevent stretching on mobile */
             margin: auto;
             border-collapse: collapse;
             background: rgba(255, 255, 255, 0.05);
@@ -81,32 +86,57 @@
         }
 
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: center;
+            font-size: 15px;
         }
 
         th {
             background: rgba(30, 144, 255, 0.3);
             color: #e3f2fd;
-            font-size: 14px;
-            letter-spacing: 1px;
         }
 
         td {
             background: rgba(255, 255, 255, 0.03);
             color: #cfe0ff;
-            font-size: 14px;
         }
 
         tr:nth-child(even) td {
             background: rgba(255, 255, 255, 0.07);
         }
 
-        /* Date Highlight */
         .date-text {
             color: #8ab4f8;
             font-weight: bold;
             text-shadow: 0 0 4px #1e90ff;
+        }
+
+        /* ------- MOBILE RESPONSIVE FIX -------- */
+        @media (max-width: 600px) {
+
+            body {
+                padding: 10px;
+            }
+
+            h1, h2 {
+                font-size: 20px;
+            }
+
+            .tabs button {
+                width: 100%;             /* Full width buttons */
+                margin: 6px 0;
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            table {
+                width: 600px;           /* Slightly small version */
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 14px;
+            }
         }
 
     </style>
@@ -124,109 +154,108 @@
     <button onclick="openTab('yearly')">Yearly</button>
 </div>
 
+
 <!-- DAILY -->
 <div id="daily" class="tab-content active">
     <h2>Daily Total & Running Total</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Daily Total</th>
-            <th>Running Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in daily_data %}
-            <tr>
-                <td class="date-text">{{ row.day|date:"Y-m-d" }}</td>
-                <td>{{ row.total_amount|floatformat:2 }}</td>
-                <td>{{ row.running_total|floatformat:2 }}</td>
 
-            </tr>
-        {% empty %}
-            <tr><td colspan="3">No rides found</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Running</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in daily_data %}
+                <tr>
+                    <td class="date-text">{{ row.day|date:"Y-m-d" }}</td>
+                    <td>{{ row.total_amount|floatformat:2 }}</td>
+                    <td>{{ row.running_total|floatformat:2 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 <!-- WEEKLY -->
 <div id="weekly" class="tab-content">
     <h2>Weekly Totals</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Year</th>
-            <th>Week</th>
-            <th>Total Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in weekly_data %}
-            <tr>
-                <td>{{ row.year }}</td>
-                <td>{{ row.week }}</td>
-                <td>{{ row.total_amount|floatformat:2 }}</td>
-
-            </tr>
-        {% empty %}
-            <tr><td colspan="3">No rides found</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Week</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in weekly_data %}
+                <tr>
+                    <td>{{ row.year }}</td>
+                    <td>{{ row.week }}</td>
+                    <td>{{ row.total_amount|floatformat:2 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- MONTHLY -->
 <div id="monthly" class="tab-content">
     <h2>Monthly Totals</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Month</th>
-            <th>Total Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in monthly_data %}
-            <tr>
-                <td class="date-text">{{ row.month|date:"F Y" }}</td>
-                <td>{{ row.total_amount|floatformat:2 }}</td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="2">No rides found</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in monthly_data %}
+                <tr>
+                    <td class="date-text">{{ row.month|date:"F Y" }}</td>
+                    <td>{{ row.total_amount|floatformat:2 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- YEARLY -->
 <div id="yearly" class="tab-content">
     <h2>Yearly Totals</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Year</th>
-            <th>Total Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in yearly_data %}
-            <tr>
-                <td class="date-text">{{ row.year }}</td>
-                <td>{{ row.total_amount|floatformat:2 }}</td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="2">No rides found</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in yearly_data %}
+                <tr>
+                    <td class="date-text">{{ row.year }}</td>
+                    <td>{{ row.total_amount|floatformat:2 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
     function openTab(id) {
-        document.querySelectorAll('.tab-content').forEach(
-            tab => tab.classList.remove('active')
-        );
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
 </script>
