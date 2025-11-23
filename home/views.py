@@ -1,9 +1,10 @@
-# home/views.py
-from django.shortcuts import render,get_object_or_404,redirect
-from django.db.models import Sum
+ #home/views.py
+from django.shortcuts import render
+from django.db.models import Sum, Count, Q
 from django.db.models.functions import TruncDate, TruncMonth, ExtractWeek, ExtractYear
 from decimal import Decimal
 from .models import Ride
+
 
 
 def home(request):
@@ -84,47 +85,45 @@ def delete_ride(request, ride_id):
     return render(request, 'confirm_delete.html', {'ride': ride})
 
 
+#
 
 def summary(request):
-    # Percentages
-    COMPANY_PERCENT = Decimal('0.40')
-    DRIVER_PERCENT = Decimal('0.60')
-
-    # ---------- DAILY TOTAL + RUNNING TOTAL ----------
+    # ---------- DAILY ----------
     daily_qs = (
         Ride.objects
         .annotate(day=TruncDate('created_at'))
         .values('day')
         .annotate(
             total_amount=Sum('amount'),
+            total_rides=Count('id'),
+            total_cash=Sum('amount', filter=Q(payment_type='cash')),
+            total_card=Sum('amount', filter=Q(payment_type='card')),
+            total_company=Sum('amount', filter=Q(payment_type='company')),
             total_tips=Sum('tips'),
         )
         .order_by('day')
     )
 
     daily_data = []
-    running_total = Decimal('0')
     for row in daily_qs:
-        amt = row['total_amount'] or Decimal('0')
-        tips = row['total_tips'] or Decimal('0')
-
-        company_share = (amt * COMPANY_PERCENT)
-        driver_share = (amt * DRIVER_PERCENT)
-        take_home = driver_share + tips
-
-        running_total += amt
+        total_amount = row['total_amount'] or Decimal('0')
+        total_tips = row['total_tips'] or Decimal('0')
+        company_share = total_amount * Decimal('0.40')
+        driver_share = total_amount * Decimal('0.60')
 
         daily_data.append({
             'day': row['day'],
-            'total_amount': amt,
-            'running_total': running_total,
+            'total_amount': total_amount,
+            'total_rides': row['total_rides'],
+            'total_cash': row['total_cash'] or Decimal('0'),
+            'total_card': row['total_card'] or Decimal('0'),
+            'total_company': row['total_company'] or Decimal('0'),
+            'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
-            'total_tips': tips,
-            'take_home': take_home,
         })
 
-    # ---------- WEEKLY TOTAL ----------
+    # ---------- WEEKLY ----------
     weekly_qs = (
         Ride.objects
         .annotate(
@@ -134,6 +133,10 @@ def summary(request):
         .values('year', 'week')
         .annotate(
             total_amount=Sum('amount'),
+            total_rides=Count('id'),
+            total_cash=Sum('amount', filter=Q(payment_type='cash')),
+            total_card=Sum('amount', filter=Q(payment_type='card')),
+            total_company=Sum('amount', filter=Q(payment_type='company')),
             total_tips=Sum('tips'),
         )
         .order_by('year', 'week')
@@ -141,30 +144,35 @@ def summary(request):
 
     weekly_data = []
     for row in weekly_qs:
-        amt = row['total_amount'] or Decimal('0')
-        tips = row['total_tips'] or Decimal('0')
-
-        company_share = (amt * COMPANY_PERCENT)
-        driver_share = (amt * DRIVER_PERCENT)
-        take_home = driver_share + tips
+        total_amount = row['total_amount'] or Decimal('0')
+        total_tips = row['total_tips'] or Decimal('0')
+        company_share = total_amount * Decimal('0.40')
+        driver_share = total_amount * Decimal('0.60')
 
         weekly_data.append({
             'year': row['year'],
             'week': row['week'],
-            'total_amount': amt,
+            'total_amount': total_amount,
+            'total_rides': row['total_rides'],
+            'total_cash': row['total_cash'] or Decimal('0'),
+            'total_card': row['total_card'] or Decimal('0'),
+            'total_company': row['total_company'] or Decimal('0'),
+            'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
-            'total_tips': tips,
-            'take_home': take_home,
         })
 
-    # ---------- MONTHLY TOTAL ----------
+    # ---------- MONTHLY ----------
     monthly_qs = (
         Ride.objects
         .annotate(month=TruncMonth('created_at'))
         .values('month')
         .annotate(
             total_amount=Sum('amount'),
+            total_rides=Count('id'),
+            total_cash=Sum('amount', filter=Q(payment_type='cash')),
+            total_card=Sum('amount', filter=Q(payment_type='card')),
+            total_company=Sum('amount', filter=Q(payment_type='company')),
             total_tips=Sum('tips'),
         )
         .order_by('month')
@@ -172,29 +180,34 @@ def summary(request):
 
     monthly_data = []
     for row in monthly_qs:
-        amt = row['total_amount'] or Decimal('0')
-        tips = row['total_tips'] or Decimal('0')
-
-        company_share = (amt * COMPANY_PERCENT)
-        driver_share = (amt * DRIVER_PERCENT)
-        take_home = driver_share + tips
+        total_amount = row['total_amount'] or Decimal('0')
+        total_tips = row['total_tips'] or Decimal('0')
+        company_share = total_amount * Decimal('0.40')
+        driver_share = total_amount * Decimal('0.60')
 
         monthly_data.append({
             'month': row['month'],
-            'total_amount': amt,
+            'total_amount': total_amount,
+            'total_rides': row['total_rides'],
+            'total_cash': row['total_cash'] or Decimal('0'),
+            'total_card': row['total_card'] or Decimal('0'),
+            'total_company': row['total_company'] or Decimal('0'),
+            'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
-            'total_tips': tips,
-            'take_home': take_home,
         })
 
-    # ---------- YEARLY TOTAL ----------
+    # ---------- YEARLY ----------
     yearly_qs = (
         Ride.objects
         .annotate(year=ExtractYear('created_at'))
         .values('year')
         .annotate(
             total_amount=Sum('amount'),
+            total_rides=Count('id'),
+            total_cash=Sum('amount', filter=Q(payment_type='cash')),
+            total_card=Sum('amount', filter=Q(payment_type='card')),
+            total_company=Sum('amount', filter=Q(payment_type='company')),
             total_tips=Sum('tips'),
         )
         .order_by('year')
@@ -202,20 +215,21 @@ def summary(request):
 
     yearly_data = []
     for row in yearly_qs:
-        amt = row['total_amount'] or Decimal('0')
-        tips = row['total_tips'] or Decimal('0')
-
-        company_share = (amt * COMPANY_PERCENT)
-        driver_share = (amt * DRIVER_PERCENT)
-        take_home = driver_share + tips
+        total_amount = row['total_amount'] or Decimal('0')
+        total_tips = row['total_tips'] or Decimal('0')
+        company_share = total_amount * Decimal('0.40')
+        driver_share = total_amount * Decimal('0.60')
 
         yearly_data.append({
             'year': row['year'],
-            'total_amount': amt,
+            'total_amount': total_amount,
+            'total_rides': row['total_rides'],
+            'total_cash': row['total_cash'] or Decimal('0'),
+            'total_card': row['total_card'] or Decimal('0'),
+            'total_company': row['total_company'] or Decimal('0'),
+            'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
-            'total_tips': tips,
-            'take_home': take_home,
         })
 
     context = {
@@ -224,6 +238,4 @@ def summary(request):
         'monthly_data': monthly_data,
         'yearly_data': yearly_data,
     }
-
     return render(request, 'summary.html', context)
-

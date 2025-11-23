@@ -2,54 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Important for mobile -->
+    <!-- Mobile friendly -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary</title>
 
     <style>
-        /* Cosmic Theme Background */
+        /* Cosmic theme */
         body {
             margin: 0;
             font-family: "Segoe UI", Arial, sans-serif;
             background: radial-gradient(circle at top, #1a1a2e, #000);
             color: #d7e3fc;
-            padding: 20px;
+            padding: 16px;
         }
 
         h1, h2 {
             text-align: center;
             color: #9bbcff;
             text-shadow: 0 0 6px #1e90ff;
-            margin-top: 10px;
-            margin-bottom: 15px;
+            margin: 10px 0;
         }
 
-        a {
+        .back-link {
             color: #9bbcff;
             text-decoration: none;
             font-size: 14px;
         }
 
-        /* Back link */
-        .back-link {
-            display: inline-block;
-            margin-bottom: 10px;
+        .back-link:hover {
+            text-decoration: underline;
         }
 
-        /* Tab Buttons */
+        /* Tabs */
         .tabs {
             text-align: center;
-            margin-bottom: 15px;
-            margin-top: 5px;
+            margin: 10px 0 20px;
         }
 
         .tabs button {
-            padding: 8px 16px;
+            padding: 8px 14px;
             margin: 4px;
             background: #0f3460;
             color: #d7e3fc;
             border: 1px solid #1e90ff;
-            border-radius: 6px;
+            border-radius: 20px;
             cursor: pointer;
             transition: 0.3s;
             text-shadow: 0 0 4px #1e90ff;
@@ -61,14 +57,14 @@
             box-shadow: 0 0 8px #1e90ff;
         }
 
-        .tabs button:active {
-            transform: scale(0.96);
+        .tabs button.active-tab {
+            background: #1e90ff;
+            color: #0b1020;
         }
 
-        /* Tab Content */
         .tab-content {
             display: none;
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .tab-content.active {
@@ -76,82 +72,118 @@
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(10px); }
+            0% { opacity: 0; transform: translateY(8px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Table wrapper for horizontal scroll on mobile */
+        /* Responsive table wrapper */
         .table-wrapper {
-            max-width: 100%;
-            overflow-x: auto;
-            margin: 0 auto 20px auto;
+            max-width: 900px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            overflow-x: auto; /* mobile horizontal scroll */
         }
 
-        /* Tables */
         table {
-            width: 900px;
-            max-width: 100%;
-            margin: auto;
+            width: 100%;
             border-collapse: collapse;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 12px rgba(0,0,0,0.5);
+            min-width: 450px; /* prevents super squish on mobile */
         }
 
         th, td {
             padding: 8px;
             text-align: center;
-            white-space: nowrap;
+            font-size: 13px;
         }
 
         th {
             background: rgba(30, 144, 255, 0.3);
             color: #e3f2fd;
-            font-size: 13px;
             letter-spacing: 0.5px;
         }
 
         td {
             background: rgba(255, 255, 255, 0.03);
             color: #cfe0ff;
-            font-size: 13px;
         }
 
         tr:nth-child(even) td {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        /* Date Highlight */
+        tr.clickable-row {
+            cursor: pointer;
+        }
+
+        tr.clickable-row:hover td {
+            background: rgba(30, 144, 255, 0.18);
+        }
+
         .date-text {
             color: #8ab4f8;
-            font-weight: bold;
+            font-weight: 600;
             text-shadow: 0 0 4px #1e90ff;
         }
 
-        /* Responsive tweaks for small screens */
-        @media (max-width: 768px) {
+        /* Details card */
+        .details-card {
+            max-width: 900px;
+            margin: 0 auto 20px;
+            background: rgba(7, 16, 40, 0.9);
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.6);
+            font-size: 14px;
+        }
+
+        .details-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #e3f2fd;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 6px 12px;
+        }
+
+        .details-item-label {
+            font-size: 12px;
+            color: #9bbcff;
+        }
+
+        .details-item-value {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Small devices */
+        @media (max-width: 600px) {
             body {
                 padding: 10px;
             }
 
-            h1 {
-                font-size: 22px;
-            }
-
-            h2 {
-                font-size: 18px;
-            }
-
             .tabs button {
-                padding: 6px 10px;
                 font-size: 12px;
-                margin: 2px;
+                padding: 6px 10px;
+            }
+
+            table {
+                min-width: 350px;
             }
 
             th, td {
                 padding: 6px;
                 font-size: 12px;
+            }
+
+            .details-card {
+                padding: 10px 12px;
             }
         }
     </style>
@@ -163,50 +195,65 @@
 <h1>Ride Summary</h1>
 
 <div class="tabs">
-    <button onclick="openTab('daily')">Daily</button>
-    <button onclick="openTab('weekly')">Weekly</button>
-    <button onclick="openTab('monthly')">Monthly</button>
-    <button onclick="openTab('yearly')">Yearly</button>
+    <button id="tab-btn-daily"   class="active-tab" onclick="openTab('daily')">Daily</button>
+    <button id="tab-btn-weekly"  onclick="openTab('weekly')">Weekly</button>
+    <button id="tab-btn-monthly" onclick="openTab('monthly')">Monthly</button>
+    <button id="tab-btn-yearly"  onclick="openTab('yearly')">Yearly</button>
 </div>
 
-<!-- DAILY -->
+<!-- ========== DAILY TAB ========== -->
 <div id="daily" class="tab-content active">
-    <h2>Daily Overview</h2>
+    <h2>Daily Summary</h2>
+
     <div class="table-wrapper">
         <table>
             <thead>
             <tr>
                 <th>Date</th>
-                <th>Daily Total</th>
-                <th>Company Share</th>
-                <th>Your Share</th>
-                <th>Total Tips</th>
-                <th>Take Home</th>
-                <th>Running Total</th>
+                <th>Total Amount</th>
+                <th>Total Rides</th>
             </tr>
             </thead>
             <tbody>
             {% for row in daily_data %}
-                <tr>
+                <tr class="clickable-row"
+                    onclick="showDailyDetails(
+                        '{{ row.day|date:"Y-m-d" }}',
+                        '{{ row.total_amount|floatformat:2 }}',
+                        '{{ row.total_rides }}',
+                        '{{ row.total_cash|floatformat:2 }}',
+                        '{{ row.total_card|floatformat:2 }}',
+                        '{{ row.total_company|floatformat:2 }}',
+                        '{{ row.total_tips|floatformat:2 }}',
+                        '{{ row.company_share|floatformat:2 }}',
+                        '{{ row.driver_share|floatformat:2 }}'
+                    )">
                     <td class="date-text">{{ row.day|date:"Y-m-d" }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
-                    <td>{{ row.company_share|floatformat:2 }}</td>
-                    <td>{{ row.driver_share|floatformat:2 }}</td>
-                    <td>{{ row.total_tips|floatformat:2 }}</td>
-                    <td>{{ row.take_home|floatformat:2 }}</td>
-                    <td>{{ row.running_total|floatformat:2 }}</td>
+                    <td>{{ row.total_rides }}</td>
                 </tr>
             {% empty %}
-                <tr><td colspan="7">No rides found</td></tr>
+                <tr><td colspan="3">No rides yet.</td></tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <!-- Daily details -->
+    <div id="daily-details" class="details-card">
+        <div class="details-title" id="daily-details-title">
+            Tap a date row to see breakdown
+        </div>
+        <div class="details-grid" id="daily-details-body">
+            <!-- Filled by JS -->
+        </div>
+    </div>
 </div>
 
-<!-- WEEKLY -->
+<!-- ========== WEEKLY TAB ========== -->
 <div id="weekly" class="tab-content">
-    <h2>Weekly Overview</h2>
+    <h2>Weekly Summary</h2>
+
     <div class="table-wrapper">
         <table>
             <thead>
@@ -214,103 +261,244 @@
                 <th>Year</th>
                 <th>Week</th>
                 <th>Total Amount</th>
-                <th>Company Share</th>
-                <th>Your Share</th>
-                <th>Total Tips</th>
-                <th>Take Home</th>
+                <th>Total Rides</th>
             </tr>
             </thead>
             <tbody>
             {% for row in weekly_data %}
-                <tr>
+                <tr class="clickable-row"
+                    onclick="showWeeklyDetails(
+                        '{{ row.year }}',
+                        '{{ row.week }}',
+                        '{{ row.total_amount|floatformat:2 }}',
+                        '{{ row.total_rides }}',
+                        '{{ row.total_cash|floatformat:2 }}',
+                        '{{ row.total_card|floatformat:2 }}',
+                        '{{ row.total_company|floatformat:2 }}',
+                        '{{ row.total_tips|floatformat:2 }}',
+                        '{{ row.company_share|floatformat:2 }}',
+                        '{{ row.driver_share|floatformat:2 }}'
+                    )">
                     <td>{{ row.year }}</td>
                     <td>{{ row.week }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
-                    <td>{{ row.company_share|floatformat:2 }}</td>
-                    <td>{{ row.driver_share|floatformat:2 }}</td>
-                    <td>{{ row.total_tips|floatformat:2 }}</td>
-                    <td>{{ row.take_home|floatformat:2 }}</td>
+                    <td>{{ row.total_rides }}</td>
                 </tr>
             {% empty %}
-                <tr><td colspan="7">No rides found</td></tr>
+                <tr><td colspan="4">No rides yet.</td></tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <div id="weekly-details" class="details-card">
+        <div class="details-title" id="weekly-details-title">
+            Tap a week row to see breakdown
+        </div>
+        <div class="details-grid" id="weekly-details-body">
+        </div>
+    </div>
 </div>
 
-<!-- MONTHLY -->
+<!-- ========== MONTHLY TAB ========== -->
 <div id="monthly" class="tab-content">
-    <h2>Monthly Overview</h2>
+    <h2>Monthly Summary</h2>
+
     <div class="table-wrapper">
         <table>
             <thead>
             <tr>
                 <th>Month</th>
                 <th>Total Amount</th>
-                <th>Company Share</th>
-                <th>Your Share</th>
-                <th>Total Tips</th>
-                <th>Take Home</th>
+                <th>Total Rides</th>
             </tr>
             </thead>
             <tbody>
             {% for row in monthly_data %}
-                <tr>
+                <tr class="clickable-row"
+                    onclick="showMonthlyDetails(
+                        '{{ row.month|date:"F Y" }}',
+                        '{{ row.total_amount|floatformat:2 }}',
+                        '{{ row.total_rides }}',
+                        '{{ row.total_cash|floatformat:2 }}',
+                        '{{ row.total_card|floatformat:2 }}',
+                        '{{ row.total_company|floatformat:2 }}',
+                        '{{ row.total_tips|floatformat:2 }}',
+                        '{{ row.company_share|floatformat:2 }}',
+                        '{{ row.driver_share|floatformat:2 }}'
+                    )">
                     <td class="date-text">{{ row.month|date:"F Y" }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
-                    <td>{{ row.company_share|floatformat:2 }}</td>
-                    <td>{{ row.driver_share|floatformat:2 }}</td>
-                    <td>{{ row.total_tips|floatformat:2 }}</td>
-                    <td>{{ row.take_home|floatformat:2 }}</td>
+                    <td>{{ row.total_rides }}</td>
                 </tr>
             {% empty %}
-                <tr><td colspan="6">No rides found</td></tr>
+                <tr><td colspan="3">No rides yet.</td></tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <div id="monthly-details" class="details-card">
+        <div class="details-title" id="monthly-details-title">
+            Tap a month row to see breakdown
+        </div>
+        <div class="details-grid" id="monthly-details-body">
+        </div>
+    </div>
 </div>
 
-<!-- YEARLY -->
+<!-- ========== YEARLY TAB ========== -->
 <div id="yearly" class="tab-content">
-    <h2>Yearly Overview</h2>
+    <h2>Yearly Summary</h2>
+
     <div class="table-wrapper">
         <table>
             <thead>
             <tr>
                 <th>Year</th>
                 <th>Total Amount</th>
-                <th>Company Share</th>
-                <th>Your Share</th>
-                <th>Total Tips</th>
-                <th>Take Home</th>
+                <th>Total Rides</th>
             </tr>
             </thead>
             <tbody>
             {% for row in yearly_data %}
-                <tr>
+                <tr class="clickable-row"
+                    onclick="showYearlyDetails(
+                        '{{ row.year }}',
+                        '{{ row.total_amount|floatformat:2 }}',
+                        '{{ row.total_rides }}',
+                        '{{ row.total_cash|floatformat:2 }}',
+                        '{{ row.total_card|floatformat:2 }}',
+                        '{{ row.total_company|floatformat:2 }}',
+                        '{{ row.total_tips|floatformat:2 }}',
+                        '{{ row.company_share|floatformat:2 }}',
+                        '{{ row.driver_share|floatformat:2 }}'
+                    )">
                     <td class="date-text">{{ row.year }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
-                    <td>{{ row.company_share|floatformat:2 }}</td>
-                    <td>{{ row.driver_share|floatformat:2 }}</td>
-                    <td>{{ row.total_tips|floatformat:2 }}</td>
-                    <td>{{ row.take_home|floatformat:2 }}</td>
+                    <td>{{ row.total_rides }}</td>
                 </tr>
             {% empty %}
-                <tr><td colspan="6">No rides found</td></tr>
+                <tr><td colspan="3">No rides yet.</td></tr>
             {% endfor %}
             </tbody>
         </table>
+    </div>
+
+    <div id="yearly-details" class="details-card">
+        <div class="details-title" id="yearly-details-title">
+            Tap a year row to see breakdown
+        </div>
+        <div class="details-grid" id="yearly-details-body">
+        </div>
     </div>
 </div>
 
 <script>
     function openTab(id) {
+        // Hide all tab contents
         document.querySelectorAll('.tab-content').forEach(
             tab => tab.classList.remove('active')
         );
+        // Remove active from all buttons
+        document.querySelectorAll('.tabs button').forEach(
+            btn => btn.classList.remove('active-tab')
+        );
+        // Show selected tab
         document.getElementById(id).classList.add('active');
+        // Activate button
+        const btn = document.getElementById('tab-btn-' + id);
+        if (btn) {
+            btn.classList.add('active-tab');
+        }
+    }
+
+    function buildDetailsHtml(labelPrefix, periodLabel, totalAmount, totalRides,
+                              totalCash, totalCard, totalCompany,
+                              totalTips, companyShare, driverShare) {
+        return `
+            <div class="details-item">
+                <div class="details-item-label">${labelPrefix}</div>
+                <div class="details-item-value">${periodLabel}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Total rides</div>
+                <div class="details-item-value">${totalRides}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Total cash</div>
+                <div class="details-item-value">${totalCash}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Total card</div>
+                <div class="details-item-value">${totalCard}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Total company</div>
+                <div class="details-item-value">${totalCompany}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Total tips</div>
+                <div class="details-item-value">${totalTips}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Total amount</div>
+                <div class="details-item-value">${totalAmount}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Company share (40%)</div>
+                <div class="details-item-value">${companyShare}</div>
+            </div>
+            <div class="details-item">
+                <div class="details-item-label">Driver share (60%)</div>
+                <div class="details-item-value">${driverShare}</div>
+            </div>
+        `;
+    }
+
+    function showDailyDetails(date, totalAmount, totalRides,
+                              totalCash, totalCard, totalCompany,
+                              totalTips, companyShare, driverShare) {
+        document.getElementById('daily-details-title').textContent =
+            'Daily breakdown for ' + date;
+        document.getElementById('daily-details-body').innerHTML =
+            buildDetailsHtml('Date', date, totalAmount, totalRides,
+                             totalCash, totalCard, totalCompany,
+                             totalTips, companyShare, driverShare);
+    }
+
+    function showWeeklyDetails(year, week, totalAmount, totalRides,
+                               totalCash, totalCard, totalCompany,
+                               totalTips, companyShare, driverShare) {
+        const label = `Year ${year}, Week ${week}`;
+        document.getElementById('weekly-details-title').textContent =
+            'Weekly breakdown: ' + label;
+        document.getElementById('weekly-details-body').innerHTML =
+            buildDetailsHtml('Week', label, totalAmount, totalRides,
+                             totalCash, totalCard, totalCompany,
+                             totalTips, companyShare, driverShare);
+    }
+
+    function showMonthlyDetails(monthLabel, totalAmount, totalRides,
+                                totalCash, totalCard, totalCompany,
+                                totalTips, companyShare, driverShare) {
+        document.getElementById('monthly-details-title').textContent =
+            'Monthly breakdown: ' + monthLabel;
+        document.getElementById('monthly-details-body').innerHTML =
+            buildDetailsHtml('Month', monthLabel, totalAmount, totalRides,
+                             totalCash, totalCard, totalCompany,
+                             totalTips, companyShare, driverShare);
+    }
+
+    function showYearlyDetails(year, totalAmount, totalRides,
+                               totalCash, totalCard, totalCompany,
+                               totalTips, companyShare, driverShare) {
+        document.getElementById('yearly-details-title').textContent =
+            'Yearly breakdown: ' + year;
+        document.getElementById('yearly-details-body').innerHTML =
+            buildDetailsHtml('Year', year, totalAmount, totalRides,
+                             totalCash, totalCard, totalCompany,
+                             totalTips, companyShare, driverShare);
     }
 </script>
 
