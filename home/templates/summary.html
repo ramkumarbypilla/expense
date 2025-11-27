@@ -226,7 +226,8 @@
                         '{{ row.total_company|floatformat:2 }}',
                         '{{ row.total_tips|floatformat:2 }}',
                         '{{ row.company_share|floatformat:2 }}',
-                        '{{ row.driver_share|floatformat:2 }}'
+                        '{{ row.driver_share|floatformat:2 }}',
+                        '{{ row.pending_amount_to_company|floatformat:2 }}'
                     )">
                     <td class="date-text">{{ row.day|date:"Y-m-d" }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
@@ -277,7 +278,8 @@
                         '{{ row.total_company|floatformat:2 }}',
                         '{{ row.total_tips|floatformat:2 }}',
                         '{{ row.company_share|floatformat:2 }}',
-                        '{{ row.driver_share|floatformat:2 }}'
+                        '{{ row.driver_share|floatformat:2 }}',
+                        '{{ row.pending_amount_to_company|floatformat:2 }}'
                     )">
                     <td>{{ row.year }}</td>
                     <td>{{ row.week }}</td>
@@ -325,7 +327,8 @@
                         '{{ row.total_company|floatformat:2 }}',
                         '{{ row.total_tips|floatformat:2 }}',
                         '{{ row.company_share|floatformat:2 }}',
-                        '{{ row.driver_share|floatformat:2 }}'
+                        '{{ row.driver_share|floatformat:2 }}',
+                        '{{ row.pending_amount_to_company|floatformat:2 }}'
                     )">
                     <td class="date-text">{{ row.month|date:"F Y" }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
@@ -372,7 +375,8 @@
                         '{{ row.total_company|floatformat:2 }}',
                         '{{ row.total_tips|floatformat:2 }}',
                         '{{ row.company_share|floatformat:2 }}',
-                        '{{ row.driver_share|floatformat:2 }}'
+                        '{{ row.driver_share|floatformat:2 }}',
+                        '{{ row.pending_amount_to_company|floatformat:2 }}'
                     )">
                     <td class="date-text">{{ row.year }}</td>
                     <td>{{ row.total_amount|floatformat:2 }}</td>
@@ -415,7 +419,8 @@
 
     function buildDetailsHtml(labelPrefix, periodLabel, totalAmount, totalRides,
                               totalCash, totalCard, totalCompany,
-                              totalTips, companyShare, driverShare) {
+                              totalTips, companyShare, driverShare,
+                              pendingAmount) {
         return `
             <div class="details-item">
                 <div class="details-item-label">${labelPrefix}</div>
@@ -453,52 +458,64 @@
                 <div class="details-item-label">Driver share (60%)</div>
                 <div class="details-item-value">${driverShare}</div>
             </div>
+            <div class="details-item">
+                <div class="details-item-label">Pending to company</div>
+                <div class="details-item-value">${pendingAmount}</div>
+            </div>
         `;
     }
 
     function showDailyDetails(date, totalAmount, totalRides,
                               totalCash, totalCard, totalCompany,
-                              totalTips, companyShare, driverShare) {
+                              totalTips, companyShare, driverShare,
+                              pendingAmount) {
         document.getElementById('daily-details-title').textContent =
             'Daily breakdown for ' + date;
         document.getElementById('daily-details-body').innerHTML =
             buildDetailsHtml('Date', date, totalAmount, totalRides,
                              totalCash, totalCard, totalCompany,
-                             totalTips, companyShare, driverShare);
+                             totalTips, companyShare, driverShare,
+                             pendingAmount);
     }
 
     function showWeeklyDetails(year, week, totalAmount, totalRides,
                                totalCash, totalCard, totalCompany,
-                               totalTips, companyShare, driverShare) {
+                               totalTips, companyShare, driverShare,
+                               pendingAmount) {
         const label = `Year ${year}, Week ${week}`;
         document.getElementById('weekly-details-title').textContent =
             'Weekly breakdown: ' + label;
         document.getElementById('weekly-details-body').innerHTML =
             buildDetailsHtml('Week', label, totalAmount, totalRides,
                              totalCash, totalCard, totalCompany,
-                             totalTips, companyShare, driverShare);
+                             totalTips, companyShare, driverShare,
+                             pendingAmount);
     }
 
     function showMonthlyDetails(monthLabel, totalAmount, totalRides,
                                 totalCash, totalCard, totalCompany,
-                                totalTips, companyShare, driverShare) {
+                                totalTips, companyShare, driverShare,
+                                pendingAmount) {
         document.getElementById('monthly-details-title').textContent =
             'Monthly breakdown: ' + monthLabel;
         document.getElementById('monthly-details-body').innerHTML =
             buildDetailsHtml('Month', monthLabel, totalAmount, totalRides,
                              totalCash, totalCard, totalCompany,
-                             totalTips, companyShare, driverShare);
+                             totalTips, companyShare, driverShare,
+                             pendingAmount);
     }
 
     function showYearlyDetails(year, totalAmount, totalRides,
                                totalCash, totalCard, totalCompany,
-                               totalTips, companyShare, driverShare) {
+                               totalTips, companyShare, driverShare,
+                               pendingAmount) {
         document.getElementById('yearly-details-title').textContent =
             'Yearly breakdown: ' + year;
         document.getElementById('yearly-details-body').innerHTML =
             buildDetailsHtml('Year', year, totalAmount, totalRides,
                              totalCash, totalCard, totalCompany,
-                             totalTips, companyShare, driverShare);
+                             totalTips, companyShare, driverShare,
+                             pendingAmount);
     }
 </script>
 

@@ -1,5 +1,5 @@
  #home/views.py
-from django.shortcuts import render
+from django.shortcuts import render,redirect, get_object_or_404
 from django.db.models import Sum, Count, Q
 from django.db.models.functions import TruncDate, TruncMonth, ExtractWeek, ExtractYear
 from decimal import Decimal
@@ -108,8 +108,11 @@ def summary(request):
     for row in daily_qs:
         total_amount = row['total_amount'] or Decimal('0')
         total_tips = row['total_tips'] or Decimal('0')
+        total_company = row['total_company'] or Decimal('0')
+
         company_share = total_amount * Decimal('0.40')
         driver_share = total_amount * Decimal('0.60')
+        pending_amount_to_company = company_share - total_company
 
         daily_data.append({
             'day': row['day'],
@@ -117,10 +120,11 @@ def summary(request):
             'total_rides': row['total_rides'],
             'total_cash': row['total_cash'] or Decimal('0'),
             'total_card': row['total_card'] or Decimal('0'),
-            'total_company': row['total_company'] or Decimal('0'),
+            'total_company': total_company,
             'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
+            'pending_amount_to_company': pending_amount_to_company,
         })
 
     # ---------- WEEKLY ----------
@@ -146,8 +150,11 @@ def summary(request):
     for row in weekly_qs:
         total_amount = row['total_amount'] or Decimal('0')
         total_tips = row['total_tips'] or Decimal('0')
+        total_company = row['total_company'] or Decimal('0')
+
         company_share = total_amount * Decimal('0.40')
         driver_share = total_amount * Decimal('0.60')
+        pending_amount_to_company = company_share - total_company
 
         weekly_data.append({
             'year': row['year'],
@@ -156,10 +163,11 @@ def summary(request):
             'total_rides': row['total_rides'],
             'total_cash': row['total_cash'] or Decimal('0'),
             'total_card': row['total_card'] or Decimal('0'),
-            'total_company': row['total_company'] or Decimal('0'),
+            'total_company': total_company,
             'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
+            'pending_amount_to_company': pending_amount_to_company,
         })
 
     # ---------- MONTHLY ----------
@@ -182,8 +190,11 @@ def summary(request):
     for row in monthly_qs:
         total_amount = row['total_amount'] or Decimal('0')
         total_tips = row['total_tips'] or Decimal('0')
+        total_company = row['total_company'] or Decimal('0')
+
         company_share = total_amount * Decimal('0.40')
         driver_share = total_amount * Decimal('0.60')
+        pending_amount_to_company = company_share - total_company
 
         monthly_data.append({
             'month': row['month'],
@@ -191,10 +202,11 @@ def summary(request):
             'total_rides': row['total_rides'],
             'total_cash': row['total_cash'] or Decimal('0'),
             'total_card': row['total_card'] or Decimal('0'),
-            'total_company': row['total_company'] or Decimal('0'),
+            'total_company': total_company,
             'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
+            'pending_amount_to_company': pending_amount_to_company,
         })
 
     # ---------- YEARLY ----------
@@ -217,8 +229,11 @@ def summary(request):
     for row in yearly_qs:
         total_amount = row['total_amount'] or Decimal('0')
         total_tips = row['total_tips'] or Decimal('0')
+        total_company = row['total_company'] or Decimal('0')
+
         company_share = total_amount * Decimal('0.40')
         driver_share = total_amount * Decimal('0.60')
+        pending_amount_to_company = company_share - total_company
 
         yearly_data.append({
             'year': row['year'],
@@ -226,10 +241,11 @@ def summary(request):
             'total_rides': row['total_rides'],
             'total_cash': row['total_cash'] or Decimal('0'),
             'total_card': row['total_card'] or Decimal('0'),
-            'total_company': row['total_company'] or Decimal('0'),
+            'total_company': total_company,
             'total_tips': total_tips,
             'company_share': company_share,
             'driver_share': driver_share,
+            'pending_amount_to_company': pending_amount_to_company,
         })
 
     context = {
@@ -239,3 +255,4 @@ def summary(request):
         'yearly_data': yearly_data,
     }
     return render(request, 'summary.html', context)
+
